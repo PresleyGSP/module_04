@@ -54,6 +54,8 @@ try:
                 try:
                         if transaction_type not in valid_transaction_types:
                             is_valid_record = False
+                            error_message = f'The transaction type "{transaction_type}" is invalid.'
+                            rejected_transactions.append((transaction, error_message))
                             raise TypeError
                 except TypeError as e:
                         print(f'The transaction type "{transaction_type}" is invalid.')
@@ -63,6 +65,9 @@ try:
                 try:
                         transaction_amount = float(transaction[2])
                 except ValueError as e:
+                        is_valid_record = False
+                        error_message += f' Non-numeric transaction amount.'
+                        rejected_transactions.append((transaction, error_message))
                         print(f'"{transaction[2]} is an invalid transaction amount.')
                         
 
@@ -77,10 +82,12 @@ try:
                         customer_data[customer_id]['balance'] += transaction_amount
                         transaction_count += 1
                         total_transaction_amount += transaction_amount
+                        transaction_counter += 1
                     elif transaction_type == 'withdrawal':
                         customer_data[customer_id]['balance'] += transaction_amount
                         transaction_count += 1
                         total_transaction_amount += transaction_amount
+                        transaction_counter += 1
             
             # Record transactions in the customer's transaction history
                     customer_data[customer_id]['transactions'].append(
