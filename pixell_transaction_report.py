@@ -78,7 +78,7 @@ try:
                         customer_data[customer_id] = {'balance': 0, 'transactions': []}
             # Update the customer's account balance based on the 
             # transaction type
-                    elif transaction_type == 'deposit':
+                    if transaction_type == 'deposit':
                         customer_data[customer_id]['balance'] += transaction_amount
                         transaction_count += 1
                         total_transaction_amount += transaction_amount
@@ -104,19 +104,21 @@ try:
         # Print the final account balances for each customer
         for customer_id, data in customer_data.items():
             balance = data['balance']
-
-            print(f"Customer {customer_id} has a balance of {balance}.")
+            print(f"Customer {customer_id} has a balance of ${balance:,.2f}.")
     
             # Print the transaction history for the customer
             print("Transaction History:")
-
             for rejected_transaction in data['transactions']:
                 amount, type = rejected_transaction
-                print(f"{type.capitalize():>16}:{amount:>12}")
-
-        average_transaction_amount = total_transaction_amount / transaction_counter
-        print(f"AVERAGE TRANSACTION AMOUNT: {average_transaction_amount}")
-
+                print(f"{type.capitalize():>16}: ${amount:,.2f}")
+        # Correcting ZeroDivisionError
+        try:
+                if transaction_counter > 0:
+                    average_transaction_amount = total_transaction_amount / transaction_counter
+                    print(f"AVERAGE TRANSACTION AMOUNT: ${average_transaction_amount:,.2f}")
+        except ZeroDivisionError as e:
+                    print("No valid transactions to calculate average.")
+        # Print rejected records to the console
         rejected_report_title = "REJECTED RECORDS"
         print(rejected_report_title)
         print('=' * len(rejected_report_title))
