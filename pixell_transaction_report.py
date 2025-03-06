@@ -55,7 +55,6 @@ try:
                         if transaction_type not in valid_transaction_types:
                             is_valid_record = False
                             error_message = f'The transaction type "{transaction_type}" is invalid.'
-                            rejected_transactions.append((transaction, error_message))
                             raise TypeError
                 except TypeError as e:
                         print(f'The transaction type "{transaction_type}" is invalid.')
@@ -67,9 +66,10 @@ try:
                 except ValueError as e:
                         is_valid_record = False
                         error_message += f' Non-numeric transaction amount.'
-                        rejected_transactions.append((transaction, error_message))
                         print(f'"{transaction[2]} is an invalid transaction amount.')
                         
+                if is_valid_record == False:
+                    rejected_transactions.append((transaction, error_message))
 
                 if is_valid_record:
             # Initialize the customer's account balance if it doesn't 
@@ -83,7 +83,7 @@ try:
                         transaction_count += 1
                         total_transaction_amount += transaction_amount
                         transaction_counter += 1
-                    elif transaction_type == 'withdrawal':
+                    elif transaction_type == 'withdraw':
                         customer_data[customer_id]['balance'] += transaction_amount
                         transaction_count += 1
                         total_transaction_amount += transaction_amount
@@ -97,33 +97,33 @@ try:
         ### COLLECT INVALID RECORDS ###
 
         # Formatting for the report        
-        report_title = "PiXELL River Transaction Report"
-        print(report_title)
-        print('=' * len(report_title))
+            report_title = "PiXELL River Transaction Report"
+            print(report_title)
+            print('=' * len(report_title))
 
-        # Print the final account balances for each customer
-        for customer_id, data in customer_data.items():
-            balance = data['balance']
-            print(f"Customer {customer_id} has a balance of ${balance:,.2f}.")
-    
-            # Print the transaction history for the customer
-            print("Transaction History:")
-            for rejected_transaction in data['transactions']:
-                amount, type = rejected_transaction
-                print(f"{type.capitalize():>16}: ${amount:,.2f}")
-        # Correcting ZeroDivisionError
-        try:
-                if transaction_counter > 0:
-                    average_transaction_amount = total_transaction_amount / transaction_counter
-                    print(f"AVERAGE TRANSACTION AMOUNT: ${average_transaction_amount:,.2f}")
-        except ZeroDivisionError as e:
-                    print("No valid transactions to calculate average.")
-        # Print rejected records to the console
-        rejected_report_title = "REJECTED RECORDS"
-        print(rejected_report_title)
-        print('=' * len(rejected_report_title))
+            # Print the final account balances for each customer
+            for customer_id, data in customer_data.items():
+                balance = data['balance']
+                print(f"Customer {customer_id} has a balance of ${balance:,.2f}.")
+        
+                # Print the transaction history for the customer
+                print("Transaction History:")
+                for rejected_transaction in data['transactions']:
+                    amount, type = rejected_transaction
+                    print(f"{type.capitalize():>16}: ${amount:,.2f}")
+            # Correcting ZeroDivisionError
+            try:
+                    if transaction_counter > 0:
+                        average_transaction_amount = total_transaction_amount / transaction_counter
+                        print(f"AVERAGE TRANSACTION AMOUNT: ${average_transaction_amount:,.2f}")
+            except ZeroDivisionError as e:
+                        print("No valid transactions to calculate average.")
+            # Print rejected records to the console
+            rejected_report_title = "REJECTED RECORDS"
+            print(rejected_report_title)
+            print('=' * len(rejected_report_title))
 
-        for rejected_transaction in rejected_transactions:
-            print("REJECTED:", rejected_transaction)
+            for rejected_transaction in rejected_transactions:
+                print("REJECTED:", rejected_transaction)
 except FileNotFoundError as e:
         print(f"The bank data file ({DATA_FILENAME}) cannot be found.")

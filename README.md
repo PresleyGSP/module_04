@@ -22,3 +22,12 @@ Presley McFarlane-Goolcharan
 
 - In the Correcting ZeroDivisionError sections I added a try block to only calculate the average if the "transaction_counter" variable was greater than 0 and if the "transaction_counter" variable was = 0 we raise the ZeroDivisionError, catch it and printed my own error message.
 - I also added formatting to the customer account balance, transaction history and average transaction amount thar prints to the console, for example the balance should print out as: $1,000.00.
+
+## Code Modification 4
+
+- Fixed indentation in the collecting invalid records section, tabbed over section so it aligns with the rest of the code.
+- Fixed transaction type check for "withdraw", changed from "withdrawal". That was probably why I was getting the "ZeroDivisionError" code.
+
+## Code Modification 5
+
+- Fixed the appending to the rejected list so it only happens once through the Validation checks if it fails both validations.
