@@ -32,36 +32,47 @@ DATA_FILENAME = "bank_data.csv"
 # The absolute path to the data file
 DATA_FILE_PATH = f"{SCRIPT_DIRECTORY}/{DATA_FILENAME}"
 try:
+
         with open(DATA_FILE_PATH, 'r') as csv_file:
             reader = csv.reader(csv_file)
 
-            # Skip heading line
+    # Skip heading line
             next(reader)
 
             for transaction in reader:
-                # Reset valid record and error message for each iteration
+        # Reset valid record and error message for each iteration
                 is_valid_record = True
                 error_message = ''
 
-                # Gets the customer ID from the first column
+        # Gets the customer ID from the first column
                 customer_id = transaction[0]
         
-                # Gets the transaction type from the second column
+        # Gets the transaction type from the second column
                 transaction_type = transaction[1]
 
-                ### VALIDATION 1 ###
+        ### VALIDATION 1 ###
+                try:
+                        if transaction_type not in valid_transaction_types:
+                            is_valid_record = False
+                            raise TypeError
+                except TypeError as e:
+                        print(f'The transaction type "{transaction_type}" is invalid.')
 
-                ### VALIDATION 2 ###
-                # Gets the transaction amount from the third column
-                transaction_amount = float(transaction[2])
+        ### VALIDATION 2 ###
+        # Gets the transaction amount from the third column
+                try:
+                        transaction_amount = float(transaction[2])
+                except ValueError as e:
+                        print(f'"{transaction[2]} is an invalid transaction amount.')
+                        
 
                 if is_valid_record:
-                    # Initialize the customer's account balance if it doesn't 
-                    # already exist
+            # Initialize the customer's account balance if it doesn't 
+            # already exist
                     if customer_id not in customer_data:
                         customer_data[customer_id] = {'balance': 0, 'transactions': []}
-                    # Update the customer's account balance based on the 
-                    # transaction type
+            # Update the customer's account balance based on the 
+            # transaction type
                     elif transaction_type == 'deposit':
                         customer_data[customer_id]['balance'] += transaction_amount
                         transaction_count += 1
@@ -71,12 +82,14 @@ try:
                         transaction_count += 1
                         total_transaction_amount += transaction_amount
             
-                    # Record transactions in the customer's transaction history
-                        customer_data[customer_id]['transactions'].append(
-                        (transaction_amount, transaction_type))
+            # Record transactions in the customer's transaction history
+                    customer_data[customer_id]['transactions'].append(
+                        (transaction_amount, transaction_type)
+                        )
         
-                ### COLLECT INVALID RECORDS ###
-        
+        ### COLLECT INVALID RECORDS ###
+
+        # Formatting for the report        
         report_title = "PiXELL River Transaction Report"
         print(report_title)
         print('=' * len(report_title))
