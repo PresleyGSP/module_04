@@ -31,3 +31,7 @@ Presley McFarlane-Goolcharan
 ## Code Modification 5
 
 - Fixed the appending to the rejected list so it only happens once through the Validation checks if it fails both validations.
+
+## Code Modification 6
+
+- Fixed spacing in error message for "Non-numeric amount"

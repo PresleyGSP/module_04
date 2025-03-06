@@ -65,7 +65,7 @@ try:
                         transaction_amount = float(transaction[2])
                 except ValueError as e:
                         is_valid_record = False
-                        error_message += f' Non-numeric transaction amount.'
+                        error_message += f'Non-numeric transaction amount.'
                         print(f'"{transaction[2]} is an invalid transaction amount.')
                         
                 if is_valid_record == False:
